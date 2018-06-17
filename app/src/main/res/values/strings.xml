@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Chit Chat</string>
+    <string name="regiser">Don\'t have an account ? Register.</string>
+    <string name="login">LOGIN</string>
+    <string name="log_out">Log Out</string>
+    <string-array name="gender_array">
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+</resources>
