@@ -1,5 +1,6 @@
 package com.thesamiroli.chitchat;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
@@ -32,6 +33,8 @@ public class RegisterActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
 
+    private   ProgressDialog mProgressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,10 +45,13 @@ public class RegisterActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
+
         mDisplayName = (TextInputLayout) findViewById(R.id.register_displayName_textInput);
         mEmail = (TextInputLayout) findViewById(R.id.register_email_textInput);
         mPassword = (TextInputLayout) findViewById(R.id.register_password_textInput);
         mRegisterButton = (Button) findViewById(R.id.register_register_button);
+
+        mProgressDialog = new ProgressDialog(this);
 
         genderSelection = (Spinner) findViewById(R.id.gender_spinner);
 
@@ -68,6 +74,8 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
+                mGender = "Male";
+
             }
         });
 
@@ -75,12 +83,20 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                String displayName = mDisplayName.getEditText().getText().toString();
-                String email = mEmail.getEditText().getText().toString();
-                String password = mPassword.getEditText().getText().toString();
+                String displayName = mDisplayName.getEditText().getText().toString().trim();
+                String email = mEmail.getEditText().getText().toString().trim();
+                String password = mPassword.getEditText().getText().toString().trim();
                 String gender = mGender;
-
-                registerUser(displayName, email, password, gender);
+                if (displayName.isEmpty() || email.isEmpty() || password.isEmpty()) {
+                    Toast.makeText(RegisterActivity.this, "One or more fields are emtpy", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    registerUser(displayName, email, password, gender);
+                    mProgressDialog.setTitle("Registering User");
+                    mProgressDialog.setMessage("Please wait while we create your accout");
+                    mProgressDialog.setCanceledOnTouchOutside(false);
+                    mProgressDialog.show();
+                }
             }
         });
     }
@@ -99,11 +115,11 @@ public class RegisterActivity extends AppCompatActivity {
 
                         } else {
                             // If sign in fails, display a message to the user.
+                            mProgressDialog.hide();
                             Toast.makeText(RegisterActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                         }
 
-                        // ...
                     }
                 });
 
