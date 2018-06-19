@@ -17,13 +17,13 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
 
+    //Firebase
     private FirebaseAuth mAuth;
 
+    //Android
     private ViewPager mViewPager;
     private ViewPagerAdapter mPagerAdapter;
-
     private TabLayout mTabLayout;
-
     NavigationView navigationView;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggler;
@@ -66,10 +66,17 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 else if(items == R.id.menu_settings){
+                    Intent settingsIntent = new Intent(MainActivity.this, Settings.class);
+                    startActivity(settingsIntent);
+
+                }
+                else if(items == R.id.menu_profile){
+                    Intent profileIntent = new Intent(MainActivity.this, Profile.class);
+                    startActivity(profileIntent);
 
                 }
                 else{
-
+                    Intent usersIntent = new Intent(MainActivity.this, Users.class);
                 }
                 return true;
             }

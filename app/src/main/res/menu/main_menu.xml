@@ -8,7 +8,7 @@
         android:id="@+id/menu_users"
         android:title="Users" />
     <item
-        android:id="@+id/profile"
+        android:id="@+id/menu_profile"
         android:title="Profile" />
 
     <item

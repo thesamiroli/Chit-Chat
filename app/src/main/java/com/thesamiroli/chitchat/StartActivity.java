@@ -19,11 +19,12 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class StartActivity extends AppCompatActivity {
 
+    //Android
     private Button registerButton, loginButton;
     private TextInputLayout mEmail, mPassword;
-
     private ProgressDialog mProgressDialog;
 
+    //Firevase
     private FirebaseAuth mAuth;
 
     @Override
