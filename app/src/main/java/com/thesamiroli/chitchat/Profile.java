@@ -55,6 +55,8 @@ public class Profile extends AppCompatActivity {
         profileImage = (CircleImageView) findViewById(R.id.profile_image);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Profile");
+
 
         //Getting the reference of Firebase Storage
         mStorageRef = FirebaseStorage.getInstance().getReference();
@@ -130,7 +132,8 @@ public class Profile extends AppCompatActivity {
                         if(task.isSuccessful()){ //If uploading to Firebase Storage is successful
 
                             //Get a download URL from Firebase Storage
-                            String downloadUrl = task.getResult().getDownloadUrl().toString();
+                           // String downloadUrl = task.getResult().getDownloadUrl().toString();----
+                            String downloadUrl = "Tester";
 
                             //Put the URL to Firebase Database inside "image" field of current user
                             mReference.child("image").setValue(downloadUrl).addOnCompleteListener(new OnCompleteListener<Void>() {
