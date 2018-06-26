@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -40,8 +42,10 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
         CircleImageView userImage = holder.userImage;
 
         userName.setText(usersModels.get(position).getName());
+        String image = usersModels.get(position).getImage();
 
-
+        if(!image.equals("default"))
+            Picasso.get().load(image).into(userImage);
     }
 
     @Override
