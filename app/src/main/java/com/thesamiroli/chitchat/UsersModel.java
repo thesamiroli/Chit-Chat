@@ -3,7 +3,21 @@ package com.thesamiroli.chitchat;
 //This is a Model Class for the data that are to be taken from Firebase Database and show them to Recycler View.
 public class UsersModel {
 
-    public String name, email, gender, image, thumb_image;
+    public String name;
+    public String email;
+    public String gender;
+    public String image;
+    public String thumb_image;
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public String key;
 
     public UsersModel(String name, String email, String gender, String image, String thumb_image) {
         this.name = name;
@@ -55,4 +69,5 @@ public class UsersModel {
     public void setThumb_image(String thumb_image) {
         this.thumb_image = thumb_image;
     }
+
 }

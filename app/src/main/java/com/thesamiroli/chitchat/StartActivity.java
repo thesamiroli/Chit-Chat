@@ -24,7 +24,7 @@ public class StartActivity extends AppCompatActivity {
     private TextInputLayout mEmail, mPassword;
     private ProgressDialog mProgressDialog;
 
-    //Firevase
+    //Firebase
     private FirebaseAuth mAuth;
 
     @Override

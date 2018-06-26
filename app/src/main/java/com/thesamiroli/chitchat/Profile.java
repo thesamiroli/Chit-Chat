@@ -2,6 +2,7 @@ package com.thesamiroli.chitchat;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -27,7 +28,14 @@ import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
 import de.hdodenhof.circleimageview.CircleImageView;
+import id.zelory.compressor.Compressor;
 
 public class Profile extends AppCompatActivity {
 
@@ -79,7 +87,8 @@ public class Profile extends AppCompatActivity {
                 profileName.setText(displayName);
 
                 //http://square.github.io/picasso/ Displaying profile picture
-                Picasso.get().load(image).into(profileImage);
+                if(!image.equals("default"))
+                    Picasso.get().load(image).placeholder(R.drawable.thesamir).into(profileImage);
 
             }
 
@@ -124,30 +133,72 @@ public class Profile extends AppCompatActivity {
                 creating a directory and file inside that */
                 StorageReference filePath = mStorageRef.child("profile_images")
                         .child(userID+".jpg");
+                final StorageReference thumbFilePath = mStorageRef.child("thumbs").child(userID+".jpg");
 
-                //Uploading the image to Firebase Storage
+                //Converting the image into Bitmap image (For thumb_image)
+                Bitmap thumb_bmp = null;
+                File thumb_image = new File(imageUri.getPath());
+                try {
+                    thumb_bmp = new Compressor(this)
+                            .setMaxHeight(200)
+                            .setMaxWidth(200)
+                            .setQuality(64)
+                            .compressToBitmap(thumb_image);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                thumb_bmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                final byte[] thumb_byte = baos.toByteArray();
+
+
+
+                //Uploading the profile image to Firebase Storage
                 filePath.putFile(imageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                         if(task.isSuccessful()){ //If uploading to Firebase Storage is successful
 
                             //Get a download URL from Firebase Storage
-                           // String downloadUrl = task.getResult().getDownloadUrl().toString();----
-                            String downloadUrl = "Tester";
+                            final String profileDownloadUrl = task.getResult().getDownloadUrl().toString();
 
-                            //Put the URL to Firebase Database inside "image" field of current user
-                            mReference.child("image").setValue(downloadUrl).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            //Upload the Thumb Image to Firebase Storage
+                            UploadTask uploadTask = thumbFilePath.putBytes(thumb_byte);
+                            uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                                 @Override
-                                public void onComplete(@NonNull Task<Void> task) {
+                                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> thumbTask) {
 
-                                    mProgressDialog.dismiss();
-                                    Toast.makeText(Profile.this, "Image uploaded",
-                                            Toast.LENGTH_SHORT).show();
+                                    /*Put the profile pic's and thumb pic's URL
+                                      to Firebase Database inside "image" and "thumb_image" field of current user */
+                                    final String thumbDownloadUrl = thumbTask.getResult().getDownloadUrl().toString();
+                                    Map imageMap = new HashMap();
+                                    imageMap.put("image", profileDownloadUrl);
+                                    imageMap.put("thumb_image",thumbDownloadUrl);
+                                    if(thumbTask.isSuccessful()){
+                                    mReference.updateChildren(imageMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+
+                                            if(task.isSuccessful()){
+                                                mProgressDialog.dismiss();
+                                                Toast.makeText(Profile.this, "Profile picture updated",
+                                                        Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    });
+
+
                                 }
+                                else{
+                                        Toast.makeText(Profile.this, "Error in uploading thumbnail",
+                                                Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+
                             });
                         }
                         else
-                            Toast.makeText(Profile.this, "Error in uploading",
+                            Toast.makeText(Profile.this, "Error in uploading your profile picture",
                                     Toast.LENGTH_SHORT).show();
                     }
                 });

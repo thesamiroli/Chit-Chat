@@ -1,6 +1,7 @@
 package com.thesamiroli.chitchat;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -40,12 +41,25 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
 
         TextView userName = holder.userName;
         CircleImageView userImage = holder.userImage;
+        final View mView = holder.mView;
+        final Context context = holder.context;
 
         userName.setText(usersModels.get(position).getName());
-        String image = usersModels.get(position).getImage();
+        String thumbImage = usersModels.get(position).getThumb_image();
 
-        if(!image.equals("default"))
-            Picasso.get().load(image).into(userImage);
+        if(!thumbImage.equals("default"))
+            Picasso.get().load(thumbImage).placeholder(R.drawable.thesamir).into(userImage);
+
+        //Gets the key of the user that has been clicked
+        final String userKey = usersModels.get(position).getKey();
+        mView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent otherProfile = new Intent(context, OtherUser.class);
+                otherProfile.putExtra("key", userKey);
+                context.startActivity(otherProfile);
+            }
+        });
     }
 
     @Override
@@ -57,12 +71,17 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
 
         TextView userName;
         CircleImageView userImage;
+        View mView;
+        Context context;
 
         public ViewHolder(Context context, View itemView) {
             super(itemView);
 
+            mView =itemView;
+            this.context = context;
             userName = itemView.findViewById(R.id.user_single_name);
             userImage = itemView.findViewById(R.id.user_thumb);
+
 
         }
     }

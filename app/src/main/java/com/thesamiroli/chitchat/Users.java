@@ -70,8 +70,10 @@ public class Users extends AppCompatActivity {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
                 UsersModel usersModel = dataSnapshot.getValue(UsersModel.class);
+                usersModel.setKey(dataSnapshot.getKey()); //Key is required on onClickListener
                 usersList.add(usersModel);
                 usersAdapter.notifyDataSetChanged();
+
             }
 
             @Override
