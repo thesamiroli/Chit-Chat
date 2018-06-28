@@ -92,7 +92,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                String displayName = mDisplayName.getEditText().getText().toString().trim();
+                String displayName = mDisplayName.getEditText().getText().toString().trim().toLowerCase();
                 String email = mEmail.getEditText().getText().toString().trim();
                 String password = mPassword.getEditText().getText().toString().trim();
                 String gender = mGender;
@@ -133,11 +133,16 @@ public class RegisterActivity extends AppCompatActivity {
 
                             //Storing the information of the user into a HashMap
                             HashMap<String, String> userInfo = new HashMap<>();
-                            userInfo.put("name", displayName);
+                            userInfo.put("dname", displayName);
                             userInfo.put("email", email);
                             userInfo.put("image", "default");
                             userInfo.put("thumb_image", "default");
                             userInfo.put("gender", gender);
+
+                            //Can be changed only via settings
+                            userInfo.put("pname", displayName); //Display Name and Profile Name are kept same at first. However, Profile Name can be changed later from Settings.
+                            userInfo.put("phone", "Phone number not added");
+                            userInfo.put("bio", "Hello there, I am using Chit Chat");
 
                             //Storing the values of HashMap into the Fireabsae Database
                             mReference.setValue(userInfo).addOnCompleteListener(new OnCompleteListener<Void>() {

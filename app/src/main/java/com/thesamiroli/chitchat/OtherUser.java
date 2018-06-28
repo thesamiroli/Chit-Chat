@@ -6,7 +6,7 @@ import android.widget.TextView;
 
 public class OtherUser extends AppCompatActivity {
 
-    TextView init;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -14,9 +14,7 @@ public class OtherUser extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Chit Chat");
 
-        String userKey = getIntent().getStringExtra("key");
-        init = (TextView) findViewById(R.id.user_name);
-        init.setText(userKey);
+
 
     }
 }

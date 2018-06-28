@@ -28,6 +28,8 @@ import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import org.w3c.dom.Text;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -45,7 +47,7 @@ public class Profile extends AppCompatActivity {
     private StorageReference mStorageRef;
 
     //Android
-    private TextView profileName;
+    private TextView profileName, displayName, mEmail, mPhone, mBio;
     private CircleImageView profileImage;
     private Button changeImage;
     private ProgressDialog mProgressDialog;
@@ -61,6 +63,10 @@ public class Profile extends AppCompatActivity {
         changeImage = (Button) findViewById(R.id.profile_changeImage_button);
         profileName = (TextView) findViewById(R.id.profile_name);
         profileImage = (CircleImageView) findViewById(R.id.profile_image);
+        displayName = (TextView) findViewById(R.id.profile_displayName);
+        mEmail = (TextView) findViewById(R.id.profile_email);
+        mPhone = (TextView) findViewById(R.id.profile_phone);
+        mBio = (TextView) findViewById(R.id.profile_bio);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Profile");
@@ -80,16 +86,24 @@ public class Profile extends AppCompatActivity {
         mReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                String displayName = dataSnapshot.child("name").getValue().toString();
+                String sProfileName = dataSnapshot.child("pname").getValue().toString();
                 String image = dataSnapshot.child("image").getValue().toString();
                 String thumbnail = dataSnapshot.child("thumb_image").getValue().toString();
+                String dName = dataSnapshot.child("dname").getValue().toString();
+                String phone = dataSnapshot.child("phone").getValue().toString();
+                String email = dataSnapshot.child("email").getValue().toString();
+                String bio = dataSnapshot.child("bio").getValue().toString();
 
-                profileName.setText(displayName);
+                profileName.setText(sProfileName);
+                displayName.setText("@" +dName);
+                mEmail.setText(email);
+                mBio.setText(bio);
+                mPhone.setText(phone);
+
 
                 //http://square.github.io/picasso/ Displaying profile picture
                 if(!image.equals("default"))
                     Picasso.get().load(image).placeholder(R.drawable.thesamir).into(profileImage);
-
             }
 
             @Override

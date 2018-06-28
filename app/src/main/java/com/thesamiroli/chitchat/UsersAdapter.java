@@ -44,7 +44,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
         final View mView = holder.mView;
         final Context context = holder.context;
 
-        userName.setText(usersModels.get(position).getName());
+        userName.setText(usersModels.get(position).getPname());
         String thumbImage = usersModels.get(position).getThumb_image();
 
         if(!thumbImage.equals("default"))
