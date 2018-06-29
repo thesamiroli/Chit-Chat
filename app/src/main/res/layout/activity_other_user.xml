@@ -1,18 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".OtherUser">
+    android:background="@color/colorPrimary"
+    android:orientation="vertical"
+    android:gravity="center"
+    tools:context=".OtherUser"
+    android:padding="10dp">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/other_user_image"
+        android:layout_width="140dp"
+        android:layout_height="140dp"
+        android:layout_marginTop="5dp"
+        android:src="@drawable/thesamir" />
 
     <TextView
-        android:id="@+id/user_name"
+        android:id="@+id/other_user_pName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="143dp"
-        android:layout_marginTop="195dp"
-        android:text="Display Name" />
-</RelativeLayout>
+        android:text="Profile Name"
+        android:textColor="@android:color/background_light"
+        android:textSize="30sp"
+        android:layout_margin="10dp"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:orientation="horizontal"
+        android:gravity="center">
+        <TextView
+            android:id="@+id/other_user_dName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginRight="10dp"
+            android:text="Display Name"
+            android:textColor="@android:color/background_light"
+            android:textSize="20sp" />
+        <TextView
+            android:id="@+id/other_user_gender"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="15dp"
+            android:text="Gender"
+            android:textColor="@android:color/background_light"
+            android:textSize="20sp" />
+
+    </LinearLayout>
+
+
+
+    <TextView
+        android:id="@+id/other_user_bio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Bio"
+        android:textColor="@android:color/background_light"
+        android:textSize="20sp"
+        android:layout_marginBottom="15dp"/>
+
+
+    <TextView
+        android:id="@+id/other_user_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Email"
+        android:textSize="20sp"
+        android:textColor="@android:color/background_light"
+        android:layout_marginBottom="15dp"/>
+
+    <Button
+        android:id="@+id/send_friend_request"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/holo_blue_light"
+        android:padding="10dp"
+        android:text="SEND FRIEND REQUEST"
+        android:textColor="@android:color/background_light"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="15dp"/>
+
+    <Button
+        android:id="@+id/cancel_request"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/holo_blue_light"
+        android:padding="10dp"
+        android:text="CANCEL FRIEND REQUEST"
+        android:textColor="@android:color/background_light"
+        android:layout_margin="10dp"/>
+
+
+</LinearLayout>

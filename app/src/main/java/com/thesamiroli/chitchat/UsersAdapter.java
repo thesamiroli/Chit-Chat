@@ -37,7 +37,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
 
         TextView userName = holder.userName;
         CircleImageView userImage = holder.userImage;
@@ -57,6 +57,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
             public void onClick(View v) {
                 Intent otherProfile = new Intent(context, OtherUser.class);
                 otherProfile.putExtra("key", userKey);
+                otherProfile.putExtra("name", usersModels.get(position).getPname());
                 context.startActivity(otherProfile);
             }
         });

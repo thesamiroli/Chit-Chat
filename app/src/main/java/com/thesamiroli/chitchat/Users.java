@@ -1,5 +1,6 @@
 package com.thesamiroli.chitchat;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -36,6 +37,8 @@ public class Users extends AppCompatActivity {
     UsersAdapter usersAdapter;
     String userID;
 
+    ProgressDialog mProgress;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,7 +55,13 @@ public class Users extends AppCompatActivity {
         currentUser = mAuth.getCurrentUser();
         userID = currentUser.getUid().toString();
 
+        mProgress = new ProgressDialog(this);
+        mProgress.setMessage("Please wait while loading user list");
+        mProgress.setTitle("Loading");
+        mProgress.setCanceledOnTouchOutside(false);
+
         loadUsers();
+        mProgress.dismiss();
 
         //Just RecyclerView's stuff
         RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.users_recycler_list);
@@ -73,6 +82,7 @@ public class Users extends AppCompatActivity {
                 usersModel.setKey(dataSnapshot.getKey()); //Key is required on onClickListener
                 usersList.add(usersModel);
                 usersAdapter.notifyDataSetChanged();
+
 
             }
 
