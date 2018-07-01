@@ -24,6 +24,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
@@ -81,13 +83,14 @@ public class Profile extends AppCompatActivity {
 
         //Pointing the Firebase Database Reference to the UID of current user
         mReference = FirebaseDatabase.getInstance().getReference().child("Users").child(userID);
+        mReference.keepSynced(true);  //stores the data offline
 
         //To get the data from Firebase Database
         mReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String sProfileName = dataSnapshot.child("pname").getValue().toString();
-                String image = dataSnapshot.child("image").getValue().toString();
+                final String image = dataSnapshot.child("image").getValue().toString();
                 String thumbnail = dataSnapshot.child("thumb_image").getValue().toString();
                 String dName = dataSnapshot.child("dname").getValue().toString();
                 String phone = dataSnapshot.child("phone").getValue().toString();
@@ -95,15 +98,31 @@ public class Profile extends AppCompatActivity {
                 String bio = dataSnapshot.child("bio").getValue().toString();
 
                 profileName.setText(sProfileName);
-                displayName.setText("@" +dName);
+                displayName.setText("@" + dName);
                 mEmail.setText(email);
                 mBio.setText(bio);
                 mPhone.setText(phone);
 
 
                 //http://square.github.io/picasso/ Displaying profile picture
-                if(!image.equals("default"))
-                    Picasso.get().load(image).placeholder(R.drawable.thesamir).into(profileImage);
+
+                /* Picasso would first try to load the image offline, and if it's not
+                *  available offline (onError), then it would take it from the Database*/
+                if (!image.equals("default")) {
+                    Picasso.get().load(image).networkPolicy(NetworkPolicy.OFFLINE)
+                            .placeholder(R.drawable.thesamir).into(profileImage, new Callback() {
+                        @Override
+                        public void onSuccess() {
+
+                        }
+
+                        @Override
+                        public void onError(Exception e) {
+                            Picasso.get().load(image)
+                                    .placeholder(R.drawable.thesamir).into(profileImage);
+                        }
+                    });
+                }
             }
 
             @Override
