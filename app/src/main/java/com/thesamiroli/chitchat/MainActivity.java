@@ -14,6 +14,8 @@ import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     NavigationView navigationView;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggler;
+    private DatabaseReference userRef;
 
 
     @Override
@@ -42,6 +45,9 @@ public class MainActivity extends AppCompatActivity {
         mTabLayout.setupWithViewPager(mViewPager);
 
         mAuth = FirebaseAuth.getInstance();
+        //Pointing the userRef to current user's UID
+        userRef = FirebaseDatabase.getInstance().getReference().child("Users")
+                .child(mAuth.getCurrentUser().getUid());
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
         mToggler = new ActionBarDrawerToggle(this, mDrawerLayout,
@@ -103,5 +109,12 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onStop() {
+
+        userRef.child("online").setValue(false)
+        super.onStop();
     }
 }
