@@ -82,8 +82,6 @@ public class Users extends AppCompatActivity {
                 usersModel.setKey(dataSnapshot.getKey()); //Key is required on onClickListener
                 usersList.add(usersModel);
                 usersAdapter.notifyDataSetChanged();
-
-
             }
 
             @Override

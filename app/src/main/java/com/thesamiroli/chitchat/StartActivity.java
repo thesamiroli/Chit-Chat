@@ -12,10 +12,14 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 public class StartActivity extends AppCompatActivity {
 
@@ -26,6 +30,7 @@ public class StartActivity extends AppCompatActivity {
 
     //Firebase
     private FirebaseAuth mAuth;
+    private DatabaseReference mUserDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +43,7 @@ public class StartActivity extends AppCompatActivity {
         loginButton = (Button) findViewById(R.id.start_login_button);
 
         mAuth = FirebaseAuth.getInstance();
+        mUserDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
 
         mProgressDialog = new ProgressDialog(this);
 
@@ -80,9 +86,24 @@ public class StartActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             mProgressDialog.dismiss();
-                           Intent mainIntent = new Intent(StartActivity.this, MainActivity.class);
-                           startActivity(mainIntent);
-                           finish();
+
+                            String userId = mAuth.getCurrentUser().getUid();
+
+                            //Get the device token id ( needed to send notifications to the device )
+                            String deviceToken = FirebaseInstanceId.getInstance().getToken();
+
+                            //Store the token inside the currently signed in user
+                            mUserDatabase.child(userId).child("device_token").setValue(deviceToken).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+
+                                    Intent mainIntent = new Intent(StartActivity.this, MainActivity.class);
+                                    startActivity(mainIntent);
+                                    finish();
+
+                                }
+                            });
+
                         }
                         else {
                             // If sign in fails, display a message to the user.

@@ -10,12 +10,13 @@ public class UsersModel {
     public String email;
     public String gender;
     public String image;
+    public String thumb_image;
+    public String key;
 
     public UsersModel() {
     }
 
-    public String thumb_image;
-    public String key;
+
 
     public String getKey() {
         return key;

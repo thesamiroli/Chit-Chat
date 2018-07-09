@@ -21,6 +21,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.w3c.dom.Text;
 
@@ -131,6 +132,9 @@ public class RegisterActivity extends AppCompatActivity {
                             mReference now points to the UID of logged in user */
                             mReference = mReference.child("Users").child(userID);
 
+                            //Getting the current device token ( needed to send notifs )
+                            String deviceToken = FirebaseInstanceId.getInstance().getToken();
+
                             //Storing the information of the user into a HashMap
                             HashMap<String, String> userInfo = new HashMap<>();
                             userInfo.put("dname", displayName);
@@ -138,6 +142,7 @@ public class RegisterActivity extends AppCompatActivity {
                             userInfo.put("image", "default");
                             userInfo.put("thumb_image", "default");
                             userInfo.put("gender", gender);
+                            userInfo.put("device_token", deviceToken);
 
                             //Can be changed only via settings
                             userInfo.put("pname", displayName); //Display Name and Profile Name are kept same at first. However, Profile Name can be changed later from Settings.
