@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
 
     //Firebase
     private FirebaseAuth mAuth;
+    DatabaseReference userRef;
 
     //Android
     private ViewPager mViewPager;
@@ -29,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
     NavigationView navigationView;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggler;
-    private DatabaseReference userRef;
 
 
     @Override
@@ -45,9 +45,12 @@ public class MainActivity extends AppCompatActivity {
         mTabLayout.setupWithViewPager(mViewPager);
 
         mAuth = FirebaseAuth.getInstance();
+        //String uid = mAuth.getCurrentUser().getUid();
         //Pointing the userRef to current user's UID
-        userRef = FirebaseDatabase.getInstance().getReference().child("Users")
-                .child(mAuth.getCurrentUser().getUid());
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            String currentUser = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            userRef = FirebaseDatabase.getInstance().getReference().child("Users").child(currentUser);
+        }
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
         mToggler = new ActionBarDrawerToggle(this, mDrawerLayout,
@@ -64,6 +67,10 @@ public class MainActivity extends AppCompatActivity {
                 mDrawerLayout.closeDrawers();
                 int items = item.getItemId();
                 if (items == R.id.menu_logout) {
+                    FirebaseUser currentUser = mAuth.getCurrentUser();
+                    if(currentUser != null){
+                        userRef.child("presence").setValue("offline");
+                    }
                     FirebaseAuth.getInstance().signOut();
                     Intent startIntent = new Intent(MainActivity.this,StartActivity.class);
                     startActivity(startIntent);
@@ -82,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
 
                 }
                 else{
+
                     Intent usersIntent = new Intent(MainActivity.this, Users.class);
                     startActivity(usersIntent);
                 }
@@ -101,6 +109,9 @@ public class MainActivity extends AppCompatActivity {
             startActivity(startIntent);
             finish();
         }
+        else {
+           userRef.child("presence").setValue("online");
+        }
     }
 
     @Override
@@ -113,8 +124,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
-
-        userRef.child("online").setValue(false)
         super.onStop();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if(currentUser != null){
+            userRef.child("presence").setValue("offline");
+        }
+
     }
 }

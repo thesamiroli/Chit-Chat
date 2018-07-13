@@ -34,22 +34,23 @@ public class ChitChat extends Application {
 
         //Firebase
         mAuth = FirebaseAuth.getInstance();
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("Users")
-                .child(mAuth.getCurrentUser().getUid());
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            mDatabase = FirebaseDatabase.getInstance().getReference().child("Users")
+                    .child(mAuth.getCurrentUser().getUid());
 
-        mDatabase.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                mDatabase.child("online").onDisconnect().setValue(false);
-                mDatabase.child("online").setValue(true);
-            }
+            mDatabase.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    mDatabase.child("presence").onDisconnect().setValue("offline");
+                }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-            }
-        })
+                }
+            });
 
 
+        }
     }
 }

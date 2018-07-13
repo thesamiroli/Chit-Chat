@@ -6,6 +6,7 @@ public class FriendsModel {
     public String key;
     public String pname;
     public String thumb_image;
+    public String presence;
 
 
     public FriendsModel() {
@@ -14,6 +15,15 @@ public class FriendsModel {
     public FriendsModel(String date) {
         this.date =date;
     }
+
+    public String getPresence() {
+        return presence;
+    }
+
+    public void setPresence(String presence) {
+        this.presence = presence;
+    }
+
     public String getPname() {
         return pname;
     }
