@@ -115,6 +115,10 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
 
                                 Intent chatIntent = new Intent(context, ChatActivity.class);
                                 chatIntent.putExtra("key", userKey);
+                                chatIntent.putExtra("name", friendsModels.get(position).getPname());
+                                chatIntent.putExtra("thumb", friendsModels.get(position).getThumb_image());
+                                chatIntent.putExtra("presence", friendsModels.get(position).getPresence());
+
                                 context.startActivity(chatIntent);
 
                             }
