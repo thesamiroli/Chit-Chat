@@ -13,8 +13,7 @@ import android.widget.Button;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ChatsFragment extends Fragment {
-    Button clickButton;
+public class ChatsFragment extends Fragment{
 
 
     public ChatsFragment() {
@@ -28,14 +27,6 @@ public class ChatsFragment extends Fragment {
         // Inflate the layout for this fragment
         View mview =  inflater.inflate(R.layout.fragment_chats, container, false);
 
-        clickButton = (Button) mview.findViewById(R.id.click_me);
-        clickButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent test = new Intent(getActivity(), Friends.class);
-                startActivity(test);
-            }
-        });
         return mview;
     }
 

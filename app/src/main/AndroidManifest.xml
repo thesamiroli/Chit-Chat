@@ -44,7 +44,6 @@
         <activity
             android:name=".OtherUser"
             android:parentActivityName=".MainActivity" />
-        <activity android:name=".Friends" />
         <activity android:name=".ChatActivity"
             android:parentActivityName=".MainActivity"></activity>
     </application>
